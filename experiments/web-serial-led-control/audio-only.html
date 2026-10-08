@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BeatSync Audio-Only Web Audio Diagnostic</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="audio-only.js" defer></script>
+  </head>
+  <body>
+    <main class="card">
+      <p class="eyebrow">Temporary diagnostic</p>
+      <h1>Web Audio routing experiment</h1>
+      <p class="description">Choose a mode and prepare it before pressing the native Play control. Reload this page before testing another mode.</p>
+
+      <section class="audio-section" aria-labelledby="setup-heading">
+        <h2 id="setup-heading">Test setup</h2>
+        <label for="testMode">Test mode</label>
+        <select id="testMode">
+          <option value="" selected disabled>Select a mode</option>
+          <option value="native">MODE 1 - Native only</option>
+          <option value="source-only">MODE 2 - MediaElementAudioSourceNode only</option>
+          <option value="source-destination">MODE 3 - Source to Destination</option>
+          <option value="source-analyser-destination">MODE 4 - Source to Analyser to Destination</option>
+        </select>
+        <label class="file-picker" for="audioFile">Choose the same media file used in the other tests</label>
+        <input id="audioFile" type="file" accept="audio/*,video/*" />
+        <p id="selectedFile" class="message">No file selected.</p>
+        <button id="prepareMode" type="button">Prepare selected mode</button>
+        <p id="setupStatus" class="message">Select a mode and file before preparing.</p>
+        <p>Selected mode: <strong id="modeName">None</strong></p>
+        <p>Graph connections: <strong id="graphConnections">Not prepared</strong></p>
+      </section>
+
+      <section class="audio-section" aria-labelledby="player-heading">
+        <h2 id="player-heading">Native player and state</h2>
+        <audio id="audioPlayer" controls preload="none"></audio>
+        <p class="message">Playback status: <strong id="playbackStatus">PAUSED</strong></p>
+        <dl class="media-state">
+          <div><dt>Current time</dt><dd id="currentTime">0</dd></div>
+          <div><dt>Duration</dt><dd id="duration">--</dd></div>
+          <div><dt>Paused</dt><dd id="pausedState">true</dd></div>
+          <div><dt>Ended</dt><dd id="endedState">false</dd></div>
+          <div><dt>readyState</dt><dd id="readyState">0</dd></div>
+          <div><dt>networkState</dt><dd id="networkState">0</dd></div>
+          <div><dt>currentSrc</dt><dd id="currentSrc">(empty)</dd></div>
+          <div><dt>Media error code</dt><dd id="mediaErrorCode">--</dd></div>
+          <div><dt>Media error message</dt><dd id="mediaErrorMessage">--</dd></div>
+        </dl>
+        <p class="message">Web Audio graph: <strong id="graphStatus">NOT CREATED</strong></p>
+        <p class="message">AudioContext state: <strong id="contextState">NOT CREATED</strong></p>
+      </section>
+
+      <section class="debug-section" aria-labelledby="events-heading">
+        <h2 id="events-heading">Media event history</h2>
+        <p class="message">Newest 20 events first. Pause entries report whether the JavaScript pause() wrapper was called within 1000 ms before the event.</p>
+        <ol id="eventHistory" class="media-event-list"></ol>
+      </section>
+    </main>
+  </body>
+</html>

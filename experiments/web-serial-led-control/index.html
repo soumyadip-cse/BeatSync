@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BeatSync 10-LED Browser-to-Arduino Synchronization Proof</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="card">
+      <p class="eyebrow">BeatSync 10-LED Browser-to-Arduino Synchronization Proof</p>
+      <h1>10-LED browser-to-Arduino test</h1>
+      <p class="description">Verify the ten physical outputs, then map local music analysis to ten LED values. This is a synchronization experiment, not the final dashboard.</p>
+
+      <section class="connection" aria-labelledby="connection-heading">
+        <h2 id="connection-heading">Connection</h2>
+        <div class="connection-row">
+          <span id="status" class="status status-disconnected" role="status">DISCONNECTED</span>
+          <button id="connectButton" type="button">Connect Arduino</button>
+        </div>
+        <p id="message" class="message">Connect the UNO R4 WiFi to begin.</p>
+        <details>
+          <summary>Connection attempt diagnostics</summary>
+          <pre id="connectionDiagnostics" class="message" aria-live="polite">No connection attempt yet.</pre>
+        </details>
+      </section>
+
+      <section aria-labelledby="manual-heading">
+        <h2 id="manual-heading">Manual 10-LED test</h2>
+        <p class="message">Send applies one brightness to all ten logical outputs. Run the sequence to test each output separately.</p>
+        <div class="section-heading">
+          <label for="brightness">Uniform brightness</label>
+          <output id="brightnessValue" for="brightness">0</output>
+        </div>
+        <input id="brightness" type="range" min="0" max="255" value="0" step="1" />
+        <div class="controls">
+          <button id="sendButton" type="button" disabled>Send to all LEDs</button>
+          <button id="testButton" type="button" disabled>Run 10 LED Test</button>
+          <button id="simultaneousButton" type="button" disabled>Test 10 LEDs Simultaneously</button>
+          <label class="live-toggle"><input id="liveToggle" type="checkbox" /><span>Live uniform frame</span></label>
+        </div>
+        <div class="custom-frame-controls">
+          <label for="customFrame">Custom 10-value frame (comma-separated, 0–255)</label>
+          <input id="customFrame" type="text" inputmode="numeric" maxlength="39" placeholder="255,0,0,0,0,0,0,0,0,0" aria-describedby="customFrameHelp" disabled />
+          <button id="customFrameButton" type="button" disabled>Send custom frame</button>
+          <p id="customFrameHelp" class="message">Example: 255,0,0,0,0,0,0,0,0,0 turns on logical LED 1 only.</p>
+        </div>
+        <p id="testStatus" class="message" role="status">Connect Arduino before running the physical output test.</p>
+      </section>
+
+      <section class="preview-section" aria-labelledby="preview-heading">
+        <h2 id="preview-heading">10 logical LED preview</h2>
+        <p class="message">Order follows the physical columns: red, then green. Digital-only channels switch at 128; preview shows the logical 0-255 value.</p>
+        <div id="virtualLedGrid" class="led-grid" aria-label="Logical LED values by physical column"></div>
+        <p id="logicalFrame" class="frame-reading">Current logical frame: 0,0,0,0,0,0,0,0,0,0</p>
+      </section>
+
+      <section class="audio-section" aria-labelledby="audio-heading">
+        <h2 id="audio-heading">Audio to 10 LEDs</h2>
+        <label class="file-picker" for="audioFile">
+          <span>Choose music / media file</span>
+          <input id="audioFile" type="file" accept="audio/*,video/*" />
+        </label>
+        <audio id="audioPlayer" controls preload="none"></audio>
+        <div class="audio-controls">
+          <label class="live-toggle"><input id="audioToLedToggle" type="checkbox" /><span>Send audio to 10 LEDs</span></label>
+          <label class="gain-control" for="fftGain"><span>Sensitivity</span><output id="fftGainValue" for="fftGain">2.0x</output></label>
+          <input id="fftGain" type="range" min="0.5" max="4" value="2" step="0.1" />
+        </div>
+        <p id="audioStatus" class="message" role="status">Choose a local media file, connect Arduino, enable output, then press Play.</p>
+        <p class="fft-reading">Full-range FFT RMS: <output id="fftRms">0.00</output> | Existing single-value brightness: <output id="fftBrightness">0</output></p>
+        <p id="bandReadings" class="message">Bands: bass 0 | low-mid 0 | mid 0 | high-mid 0 | treble 0</p>
+      </section>
+
+      <section class="debug-section" aria-labelledby="debug-heading">
+        <h2 id="debug-heading">Runtime diagnostics</h2>
+        <p id="debugSummary" class="debug-summary" role="status">AUDIO ANALYSIS: STOPPED | SERIAL OUTPUT: IDLE | FRAMES: 0 | WRITE ERRORS: 0</p>
+        <dl class="debug-grid">
+          <div><dt>Audio time</dt><dd id="debugAudioTime">0.00 s</dd></div>
+          <div><dt>Calculated brightness</dt><dd id="debugBrightness">0</dd></div>
+          <div><dt>Last frame timestamp</dt><dd id="debugLastSendTimestamp">--</dd></div>
+          <div><dt>Frame send count</dt><dd id="debugSendCount">0</dd></div>
+          <div><dt>Successful frame writes</dt><dd id="debugSuccessCount">0</dd></div>
+          <div><dt>Failed frame writes</dt><dd id="debugFailedCount">0</dd></div>
+          <div><dt>Connection state</dt><dd id="debugConnectionState">DISCONNECTED</dd></div>
+          <div><dt>Analysis loop</dt><dd id="debugAnalysisLoop">STOPPED</dd></div>
+          <div><dt>Last 10-LED frame sent</dt><dd id="debugLastSentFrame">--</dd></div>
+          <div><dt>Last value actually sent (LED 10)</dt><dd id="debugLastSentValue">--</dd></div>
+          <div><dt>Frame size</dt><dd id="debugFrameSize">--</dd></div>
+          <div><dt>Active writes</dt><dd id="debugActiveWrites">0</dd></div>
+          <div><dt>Write overlaps</dt><dd id="debugWriteOverlaps">0</dd></div>
+          <div><dt>Peak active writes</dt><dd id="debugPeakWrites">0</dd></div>
+          <div><dt>Backpressure observations</dt><dd id="debugBackpressure">0</dd></div>
+          <div><dt>Writer desired size</dt><dd id="debugDesiredSize">--</dd></div>
+          <div><dt>40 s / 90 s / end reached</dt><dd id="debugMilestones">No / No / No</dd></div>
+          <div><dt>Last runtime error</dt><dd id="debugRuntimeError">--</dd></div>
+          <div><dt>Current 10-LED frame</dt><dd id="debugCurrentFrame">0,0,0,0,0,0,0,0,0,0</dd></div>
+          <div><dt>Five normalized bands (bass / low-mid / mid / high-mid / treble)</dt><dd id="debugBandValues">0.00 / 0.00 / 0.00 / 0.00 / 0.00</dd></div>
+          <div><dt>Beat state</dt><dd id="debugBeatState">IDLE</dd></div>
+        </dl>
+      </section>
+
+      <section id="mediaEvents" class="debug-section" aria-labelledby="media-events-heading">
+        <h2 id="media-events-heading">Media event history</h2>
+        <p class="message">Newest 20 events first; retained across pauses.</p>
+        <ol id="mediaEventsList"></ol>
+      </section>
+
+      <p class="protocol-note">Temporary frame protocol: ten comma-separated integers (0-255) followed by newline. Example: <code>120,80,30,200,255,100,40,180,220,90\n</code></p>
+      <p class="protocol-note">PWM: D3, D5, D6, D9, D10, D11. Digital threshold at 128: D2, D4, D7, D8.</p>
+    </main>
+    <script src="app.js" defer></script>
+  </body>
+</html>

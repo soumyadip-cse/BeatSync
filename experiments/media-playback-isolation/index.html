@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Media Playback Isolation</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <h1>Media Playback Isolation</h1>
+
+      <label for="mediaFile">Choose an audio or video media file</label>
+      <input id="mediaFile" type="file" accept="audio/*,video/*" />
+
+      <section aria-labelledby="file-heading">
+        <h2 id="file-heading">Selected file</h2>
+        <dl class="file-details">
+          <div><dt>Name</dt><dd id="fileName">None</dd></div>
+          <div><dt>Type</dt><dd id="fileType">--</dd></div>
+          <div><dt>Size</dt><dd id="fileSize">--</dd></div>
+        </dl>
+      </section>
+
+      <section aria-labelledby="player-heading">
+        <h2 id="player-heading">Native audio player</h2>
+        <audio id="audioPlayer" controls preload="metadata"></audio>
+        <p class="status-row">Status: <strong id="playbackStatus" data-state="PAUSED">PAUSED</strong></p>
+        <div class="time-row">
+          <span>Current time: <output id="currentTime">0:00</output></span>
+          <span>Duration: <output id="duration">--:--</output></span>
+        </div>
+      </section>
+
+      <section aria-labelledby="events-heading">
+        <h2 id="events-heading">Diagnostics / media event history</h2>
+        <p class="hint">Newest 20 events first. Playback is not controlled by this page.</p>
+        <ol id="eventHistory" aria-live="polite"></ol>
+      </section>
+    </main>
+  </body>
+</html>

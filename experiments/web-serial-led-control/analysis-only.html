@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BeatSync Mode 5 - Audio Analysis Only</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="analysis-only.js" defer></script>
+  </head>
+  <body>
+    <main class="card">
+      <p class="eyebrow">Temporary diagnostic - Mode 5</p>
+      <h1>Audio analysis only</h1>
+      <p class="description">Select the test file, then use the native audio controls to play it. This page runs the BeatSync FFT loop without serial or Arduino output.</p>
+
+      <section class="audio-section" aria-labelledby="media-heading">
+        <h2 id="media-heading">Media</h2>
+        <label class="file-picker" for="audioFile">Choose the same test media file</label>
+        <input id="audioFile" type="file" accept="audio/*,video/*" />
+        <audio id="audioPlayer" controls preload="none"></audio>
+      </section>
+
+      <section class="debug-section" aria-labelledby="analysis-heading">
+        <h2 id="analysis-heading">Live analysis</h2>
+        <dl class="debug-grid">
+          <div><dt>currentTime</dt><dd id="currentTime">0.00 s</dd></div>
+          <div><dt>FFT RMS</dt><dd id="fftRms">0.00</dd></div>
+          <div><dt>Calculated brightness</dt><dd id="brightness">0</dd></div>
+          <div><dt>Analysis frame count</dt><dd id="frameCount">0</dd></div>
+          <div><dt>Last analysis timestamp</dt><dd id="lastAnalysisTimestamp">--</dd></div>
+        </dl>
+      </section>
+
+      <section class="debug-section" aria-labelledby="events-heading">
+        <h2 id="events-heading">Media event history</h2>
+        <p class="message">Newest 20 events first. Pause events show whether JavaScript called pause() immediately beforehand.</p>
+        <ol id="eventHistory"></ol>
+      </section>
+    </main>
+  </body>
+</html>

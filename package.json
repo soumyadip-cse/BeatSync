@@ -1,0 +1,12 @@
+{
+  "name": "beatsync",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "Local browser music-to-light dashboard and Arduino integration",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "start": "node backend/dev-server.js",
+    "test": "node --test frontend/tests/*.test.js"
+  }
+}

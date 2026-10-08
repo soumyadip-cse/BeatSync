@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#050914" />
+    <meta name="description" content="BeatSync turns real music into measurable audio features and physical LED light." />
+    <title>BeatSync — Music Into Light</title>
+    <link rel="stylesheet" href="/frontend/styles.css" />
+  </head>
+  <body>
+    <div class="cosmos" aria-hidden="true"><div class="cosmos__nebula"></div><div class="cosmos__stars" id="starfield"></div></div>
+    <header class="topbar">
+      <a class="brand" href="#home" aria-label="BeatSync home">
+        <span class="brand__mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+        <span><strong>Beat<span>Sync</span></strong><small>Music · Lyrics · Arduino Lights</small></span>
+      </a>
+      <div class="topbar__right">
+        <div class="serial-pill" id="connectionPill"><span class="status-dot"></span><span id="connectionLabel">Arduino Disconnected</span></div>
+        <button class="button button--small button--outline" id="connectButton" type="button">Connect Arduino</button>
+        <button class="icon-button" id="settingsJump" type="button" aria-label="Jump to lighting controls" title="Lighting controls">⚙</button>
+        <time class="clock" id="localClock">--:--<small>LOCAL TIME</small></time>
+      </div>
+    </header>
+
+    <div class="shell">
+      <aside class="sidebar" aria-label="Main navigation">
+        <div class="sidebar__label">WORKSPACE</div>
+        <a class="side-link" id="libraryNavButton" href="#library"><span>♫</span>Music Library</a>
+        <a class="side-link side-link--active" href="#home"><span>⌂</span>Home</a>
+        <a class="side-link" href="#experience"><span>♫</span>Live Experience</a>
+        <a class="side-link" href="#hardware"><span>◉</span>Arduino Control</a>
+        <a class="side-link" href="#research"><span>⌘</span>How It Works</a>
+        <a class="side-link" href="#timeline"><span>◷</span>Timeline</a>
+        <div class="sidebar__footer"><span class="pulse-dot"></span>LOCAL AUDIO PIPELINE<small>Audio stays in this browser</small></div>
+      </aside>
+
+      <main id="home" class="main-content">
+        <section class="hero panel panel--hero" aria-labelledby="hero-title">
+          <div class="hero__copy">
+            <p class="eyebrow"><span class="eyebrow__line"></span>REAL-TIME MUSIC LIGHTING</p>
+            <h1 id="hero-title">Music is converted into data.<br /><span>Data is converted into light.</span></h1>
+            <p class="hero__description">A local audio engine listens to your song, separates its frequencies, and sends ten changing light values to your Arduino.</p>
+            <a class="button button--primary" href="#experience">Launch experience <span aria-hidden="true">↘</span></a>
+            <div class="hero__facts"><span><b>10</b> default logical LEDs</span><span><b>115200</b> baud</span><span><b>100 ms</b> default serial interval</span></div>
+          </div>
+          <div class="hero-orbit" aria-hidden="true">
+            <div class="hero-orbit__halo"></div><div class="hero-orbit__planet"></div>
+            <span class="hero-orbit__ring hero-orbit__ring--one"></span><span class="hero-orbit__ring hero-orbit__ring--two"></span>
+            <span class="hero-orbit__satellite hero-orbit__satellite--one"></span><span class="hero-orbit__satellite hero-orbit__satellite--two"></span>
+            <div class="hero-orbit__caption">AUDIO <i>→</i> LIGHT</div>
+          </div>
+          <div class="hero__edge">BEATSYNC / EXPERIMENT 01</div>
+        </section>
+
+        <div class="dashboard-grid">
+          <div class="column column--left">
+            <section class="panel player-panel" id="experience" aria-labelledby="player-heading">
+              <div class="panel-heading"><div><span class="panel-icon">♫</span><h2 id="player-heading">Now Playing</h2></div><span class="live-tag" id="playState"><i></i>READY</span></div>
+              <label class="upload-target" for="audioFiles"><span class="upload-target__icon">＋</span><span><b>Add local music</b><small>MP3, WAV, M4A, OGG or video with audio · files stay on this device</small></span><input id="audioFiles" type="file" accept="audio/*,video/*,.mp3,.mpeg,.wav,.m4a,.ogg,.mp4,.webm" multiple /></label>
+              <div class="track-info"><div class="album-art" aria-hidden="true"><span class="album-art__disc"></span><span class="album-art__orbit">BS</span></div><div class="track-info__copy"><h3 id="trackName">No track selected</h3><p id="trackArtist">Choose a local music file to begin</p><div class="track-meta"><span id="trackDuration">--:--</span><span id="sourceLabel">NO SOURCE</span></div></div></div>
+              <p class="track-availability" id="trackAvailability" hidden></p>
+              <audio id="audioPlayer" controls preload="metadata"></audio>
+              <div class="mic-controls">
+                <div class="mic-controls__heading"><b>MICROPHONE MODE</b><span id="microphoneStatus">Permission not requested</span></div>
+                <label class="select-label" for="microphoneInput">Input device</label>
+                <select id="microphoneInput"><option value="">System default microphone</option></select>
+                <div class="mic-controls__buttons"><button class="button button--outline button--small" id="startMicrophone" type="button">Start microphone</button><button class="button button--outline button--small" id="stopMicrophone" type="button">Stop microphone</button></div>
+                <small>Voice analysis reuses the same FFT and lighting engine. Song identification and lyrics stay off in this mode.</small>
+              </div>
+              <div class="player-footer"><span id="playbackTime">00:00 / --:--</span><span class="privacy-note"><i></i>FILE STAYS ON DEVICE</span></div>
+              <div class="library-summary-panel">
+                <div class="library-summary-panel__copy"><b>MUSIC LIBRARY</b><span>40 metadata tracks · <span id="localMediaCount">0 local media</span></span></div>
+                <button class="button button--outline button--small" id="openLibraryButton" type="button">Open Library <span aria-hidden="true">→</span></button>
+              </div>
+              <p class="sr-only" id="audioStatus" role="status">No track loaded.</p>
+            </section>
+
+            <section class="panel digital-twin-panel" id="hardware" aria-labelledby="twin-heading">
+              <div class="panel-heading"><div><span class="panel-icon">♧</span><h2 id="twin-heading">10 Logical LEDs</h2></div><span class="frame-mode" id="frameModeLabel">LIVE LOGICAL</span></div>
+              <p class="panel-subtitle"><span id="logicalCountLabel">LOGICAL LEDS: 10</span> <small id="logicalPhysicalLabel">Logical frame is mapped to the current 10 physical outputs.</small></p>
+              <div class="twin-columns" id="ledTwin" aria-label="Ten logical LED values"></div>
+              <div class="frame-readout"><span id="frameCaption">CURRENT LOGICAL FRAME</span><code id="currentFrame">0,0,0,0,0,0,0,0,0,0</code></div>
+              <div class="hardware-preview">
+                <div class="hardware-preview__heading"><b>UNO R4 · PHYSICAL OUTPUT PREVIEW</b><span id="hardwareModeLabel">MAPPED PREVIEW</span></div>
+                <div id="hardwareTwin" class="hardware-twin" aria-label="Ten physical Arduino output values"></div>
+                <div class="frame-readout"><span id="hardwareFrameStatus">PREVIEW ONLY · NOT TRANSMITTED</span><code id="hardwareFrame">0,0,0,0,0,0,0,0,0,0</code></div>
+                <small>Four digital-only pins switch at 128; the six PWM pins support variable brightness.</small>
+              </div>
+            </section>
+
+            <section class="panel playlist-note-panel lyrics-panel" aria-labelledby="lyrics-heading">
+              <div class="panel-heading"><div><span class="panel-icon">≋</span><h2 id="lyrics-heading">Synchronized Lyrics</h2></div><span class="muted-chip" id="lyricsStatusPill">NO LYRICS LOADED</span></div>
+              <label class="upload-target lyrics-upload" for="lyricsFile"><span class="upload-target__icon">♫</span><span><b>Load timed lyrics</b><small>Choose a matching local .LRC file</small></span><input id="lyricsFile" type="file" accept=".lrc,text/plain" /></label>
+              <div class="lyrics-lookup" aria-label="Find lyrics by song metadata">
+                <p>If the file has no song tags, enter its title and artist to search lyrics.</p>
+                <label>Song title<input id="lyricsTrackTitle" type="text" autocomplete="off" placeholder="Song title" /></label>
+                <label>Artist<input id="lyricsTrackArtist" type="text" autocomplete="off" placeholder="Artist name" /></label>
+                <button class="button button--outline button--small" id="findLyricsButton" type="button">Find lyrics</button>
+              </div>
+              <p class="lyrics-file-info" id="lyricsFileName">Song metadata will be checked for matching LRCLIB lyrics. A local .LRC file can also be loaded.</p>
+              <div class="lyrics-display" id="lyricsDisplay">
+                <p class="lyrics-line lyrics-line--previous" id="lyricsPrevious"></p>
+                <strong class="lyrics-line lyrics-line--current" id="lyricsCurrent" aria-live="polite">Choose a song to search for lyrics</strong>
+                <p class="lyrics-line lyrics-line--next" id="lyricsNext"></p>
+              </div>
+              <pre class="lyrics-plain" id="lyricsPlain" hidden></pre>
+              <p class="identification-status" id="identificationStatus">Song identification is idle.</p>
+              <p class="sr-only" id="lyricsStatus" role="status">No lyrics loaded.</p>
+            </section>
+          </div>
+
+          <div class="column column--center">
+            <section class="panel monitor-panel" aria-labelledby="monitor-heading">
+              <div class="panel-heading"><div><span class="panel-icon">⌁</span><h2 id="monitor-heading">Live Audio Analysis</h2></div><span class="live-tag" id="analysisState"><i></i>WAITING FOR AUDIO</span></div>
+              <div class="chart-title-row"><span>FREQUENCY SPECTRUM</span><small id="sampleRateLabel">Sample rate · -- Hz</small></div>
+              <canvas class="spectrum-canvas" id="spectrumCanvas" aria-label="Live audio frequency spectrum" role="img"></canvas>
+              <div class="frequency-labels"><span>40 Hz</span><span>250 Hz</span><span>2 kHz</span><span>6 kHz</span><span>20 kHz</span></div>
+              <div class="chart-title-row chart-title-row--wave"><span>WAVEFORM</span><small id="audioTimeLabel">00:00</small></div>
+              <canvas class="waveform-canvas" id="waveformCanvas" aria-label="Live audio waveform" role="img"></canvas>
+              <div class="metric-row">
+                <div class="metric"><span class="metric__icon metric__icon--violet">✳</span><small>BEAT / MIN</small><strong id="bpmMetric">--</strong><em>estimate</em></div>
+                <div class="metric"><span class="metric__icon metric__icon--blue">◒</span><small>OVERALL ENERGY</small><strong id="energyMetric">--<sup>%</sup></strong><div class="metric-bar"><i id="energyBar"></i></div></div>
+                <div class="metric"><span class="metric__icon metric__icon--pink">∿</span><small>BEAT EVENT</small><strong class="metric__beat" id="beatMetric">WAITING</strong><em id="beatSubtext">No onset yet</em></div>
+                <div class="metric"><span class="metric__icon metric__icon--cyan">◷</span><small>AUDIO TIME</small><strong class="metric__time" id="elapsedMetric">00:00</strong><em id="durationMetric">--:-- total</em></div>
+                <div class="metric"><span class="metric__icon metric__icon--blue">≈</span><small>BEAT CONFIDENCE</small><strong id="beatConfidenceMetric">—</strong><em>detector confidence</em></div>
+                <div class="metric"><span class="metric__icon metric__icon--cyan">⌁</span><small>TRANSIENT</small><strong class="metric__beat" id="transientMetric">—</strong><em>recent spectral rise</em></div>
+              </div>
+              <div class="band-list" id="bandMeters" aria-label="Frequency band energy"></div>
+            </section>
+
+            <section class="panel sculpture-panel" aria-labelledby="sculpture-heading">
+              <div class="panel-heading"><div><span class="panel-icon">✧</span><h2 id="sculpture-heading">Logical Light Sculpture</h2></div><span class="live-tag live-tag--quiet" id="sculptureSource">SAME LOGICAL FRAME</span></div>
+              <p class="panel-subtitle">This virtual ring renders the current N-value lighting-engine frame.</p>
+              <div class="sculpture-stage" id="sculptureStage">
+                <div class="sculpture-platform"></div><div class="sculpture-ring" id="sculptureRing" aria-label="Three dimensional configurable logical LED sculpture"></div>
+                <div class="sculpture-glow"></div><div class="sculpture-ground"></div>
+                <span class="sculpture-axis sculpture-axis--x">LOGICAL RING</span><span class="sculpture-axis sculpture-axis--y">10 LOGICAL OUTPUTS</span>
+              </div>
+              <div class="sculpture-legend"><span>VIRTUAL FRAME · DATA DRIVEN</span><span id="sculptureFrameStatus">PREVIEW · NOT TRANSMITTED</span></div>
+            </section>
+
+            <section class="panel serial-panel" aria-labelledby="serial-heading">
+              <div class="panel-heading"><div><span class="panel-icon">⌘</span><h2 id="serial-heading">Arduino Status</h2></div><span class="serial-status" id="serialStatus"><i class="status-dot"></i><b>Disconnected</b></span></div>
+              <div class="serial-layout">
+                <div class="board-illustration" aria-hidden="true"><div class="board-chip">UNO<br />R4</div><span class="board-usb"></span><i class="board-pin board-pin--1"></i><i class="board-pin board-pin--2"></i><i class="board-pin board-pin--3"></i><small>UNO R4 · DIAGRAM</small></div>
+                <dl class="serial-details">
+                  <div><dt>DEVICE</dt><dd id="deviceLabel">Not selected</dd></div>
+                  <div><dt>USB ID</dt><dd id="deviceId">--</dd></div>
+                  <div><dt>BAUD RATE</dt><dd>115200</dd></div>
+                  <div><dt>UPDATE RATE</dt><dd id="rateReadout">10 frames / sec max</dd></div>
+                  <div><dt>LAST WRITE</dt><dd id="lastWriteTime">--</dd></div>
+                </dl>
+              </div>
+              <div class="serial-actions"><label class="toggle-control"><input type="checkbox" id="audioToLed" checked /><span class="toggle-control__track"></span><span>Automatically send music frames while connected</span></label><button class="button button--outline button--small" id="disconnectButton" type="button" disabled>Disconnect</button></div>
+              <div class="serial-stats"><div><small>FRAMES</small><b id="frameCount">0</b></div><div><small>WRITE OK</small><b id="writeSuccessCount">0</b></div><div><small>ERRORS</small><b id="writeErrorCount">0</b></div><div><small>LAST FRAME</small><code id="lastSentFrame">--</code></div></div>
+              <div class="manual-frame"><label for="customFrame">Manual 10-value frame</label><div><input id="customFrame" type="text" inputmode="numeric" maxlength="39" placeholder="255,0,0,0,0,0,0,0,0,0" /><button class="button button--small button--purple" id="sendCustomFrame" type="button" disabled>Send</button></div><small>Ten comma-separated values, each 0–255.</small></div>
+              <div class="manual-hardware-test">
+                <div class="manual-hardware-test__heading"><b>10-LED HARDWARE TEST</b><small>Manual test output · independent of music analysis</small></div>
+                <div class="manual-test-buttons"><button class="button button--outline button--small" id="allOffButton" type="button">All off</button><button class="button button--outline button--small" id="allOnButton" type="button">All on</button><button class="button button--outline button--small" id="sequentialTestButton" type="button">Sequential</button><button class="button button--outline button--small" id="stopSequenceButton" type="button">Stop test</button></div>
+                <div class="manual-led-control"><label for="manualLedIndex">LED channel</label><select id="manualLedIndex"><option value="0">L0 · D2 · digital</option><option value="1">L1 · D7 · digital</option><option value="2">L2 · D3 · PWM</option><option value="3">L3 · D8 · digital</option><option value="4">L4 · D4 · digital</option><option value="5">L5 · D9 · PWM</option><option value="6">L6 · D5 · PWM</option><option value="7">L7 · D10 · PWM</option><option value="8">L8 · D6 · PWM</option><option value="9">L9 · D11 · PWM</option></select><input id="manualLedBrightness" type="range" min="0" max="255" value="255" /><button class="button button--outline button--small" id="sendSingleLedButton" type="button">Set + send</button></div>
+                <small id="manualLedCapability">Digital-only: values below 128 are OFF; values 128+ are ON.</small>
+              </div>
+              <p class="serial-disclaimer">Web Serial confirms bytes were written; this firmware does not return LED acknowledgements.</p>
+              <details class="connection-log"><summary>Connection diagnostics <span id="connectionPhase">No attempt</span></summary><ol id="connectionLog"><li>Start a connection from this page.</li></ol></details>
+              <details class="connection-log"><summary>Media event history <span>latest 20</span></summary><ol id="mediaEventList"><li>Choose and play a local track.</li></ol></details>
+              <details class="connection-log"><summary>Runtime diagnostics <span>live values only</span></summary><div class="runtime-grid"><span>Source</span><b id="sourceTypeDiagnostic">None</b><span>AudioContext</span><b id="audioContextState">not created</b><span>Waveform RMS</span><b id="audioRmsMetric">—</b><span>Analysis frames</span><b id="analysisFrameCount">0</b><span>Active writes</span><b id="activeWrites">0</b><span>Write overlaps</span><b id="writeOverlaps">0</b><span>Peak writes</span><b id="peakWrites">0</b><span>Backpressure</span><b id="backpressureCount">0</b><span>Latest pending frame</span><b id="writePending">none</b><span>Last runtime error</span><b id="runtimeError">--</b></div></details>
+            </section>
+          </div>
+
+          <div class="column column--right">
+            <section class="panel lighting-panel" id="lighting" aria-labelledby="lighting-heading">
+              <div class="panel-heading"><div><span class="panel-icon">☼</span><h2 id="lighting-heading">Lighting Controls</h2></div><span class="muted-chip">LIVE ENGINE</span></div>
+              <label class="select-label" for="logicalLedCount">Logical LED count</label>
+              <select id="logicalLedCount"><option value="8">8 logical LEDs</option><option value="10" selected>10 logical LEDs</option><option value="20">20 logical LEDs</option><option value="50">50 logical LEDs</option><option value="100">100 logical LEDs</option></select>
+              <p class="control-note">The virtual frame uses this count. Current Arduino hardware still has 10 physical outputs.</p>
+              <label class="select-label" for="lightingPreset">Lighting preset</label>
+              <select id="lightingPreset"><option value="balanced" selected>Balanced</option><option value="pulse">Pulse</option><option value="concert">Concert</option><option value="chill">Chill</option><option value="bass-heavy">Bass Heavy</option><option value="spectrum">Spectrum</option></select>
+              <label class="select-label" for="visualMode">Visualization mode</label>
+              <select id="visualMode"><option value="spectrum">Spectrum blend</option><option value="hybrid" selected>Hybrid · spectrum + beat</option><option value="wave">Traveling wave</option><option value="pulse">Energy pulse</option></select>
+              <div class="control-range"><label for="sensitivity">Audio sensitivity <output id="sensitivityValue">1.0×</output></label><input id="sensitivity" type="range" min="0.4" max="2" value="1" step="0.05" /></div>
+              <div class="control-range"><label for="intensity">Global brightness <output id="intensityValue">72%</output></label><input id="intensity" type="range" min="0" max="1" value="0.72" step="0.01" /></div>
+              <div class="control-range"><label for="smoothing">Attack <output id="smoothingValue">45 ms</output></label><input id="smoothing" type="range" min="0.01" max="0.18" value="0.045" step="0.005" /></div>
+              <div class="control-range"><label for="smoothingRelease">Release / decay <output id="smoothingReleaseValue">280 ms</output></label><input id="smoothingRelease" type="range" min="0.08" max="1.2" value="0.28" step="0.02" /></div>
+              <div class="control-range"><label for="beatBoost">Beat boost <output id="beatBoostValue">110%</output></label><input id="beatBoost" type="range" min="0" max="2" value="1.1" step="0.05" /></div>
+              <div class="control-range"><label for="transientBoost">Transient boost <output id="transientBoostValue">120%</output></label><input id="transientBoost" type="range" min="0" max="2" value="1.2" step="0.05" /></div>
+              <div class="control-range"><label for="beatThreshold">Beat threshold <output id="beatThresholdValue">0.13</output></label><input id="beatThreshold" type="range" min="0.08" max="0.5" value="0.13" step="0.01" /></div>
+              <div class="control-range"><label for="transientThreshold">Transient threshold <output id="transientThresholdValue">0.14</output></label><input id="transientThreshold" type="range" min="0.08" max="0.5" value="0.14" step="0.01" /></div>
+              <div class="control-range"><label for="frameRate">Serial frame interval <output id="frameRateValue">67 ms</output></label><input id="frameRate" type="range" min="50" max="1000" value="67" step="1" /><small id="serialRateHelp">About 15 physical frames per second by default. Only the newest unsent frame is kept.</small></div>
+              <div class="lighting-note"><span>●</span>Audio analysis and LED frames stay in the browser. Serial is paced separately.</div>
+            </section>
+
+            <section class="panel quick-panel" aria-labelledby="quick-heading">
+              <div class="panel-heading"><div><span class="panel-icon">ϟ</span><h2 id="quick-heading">Quick Controls</h2></div></div>
+              <div class="quick-buttons"><button class="quick-button quick-button--play" id="playButton" type="button">▶ <span>Play</span></button><button class="quick-button quick-button--pause" id="pauseButton" type="button">Ⅱ <span>Pause</span></button><button class="quick-button quick-button--stop" id="stopButton" type="button">■ <span>Stop</span></button></div>
+              <p class="quick-note">Playback controls act only on the selected local media.</p>
+            </section>
+
+            <section class="panel band-panel" aria-labelledby="band-heading">
+              <div class="panel-heading"><div><span class="panel-icon">◌</span><h2 id="band-heading">Frequency Bands</h2></div><span class="unit-label">NORMALIZED 0–1</span></div>
+              <p class="band-summary__status" id="bandSummaryStatus">Bands appear after playback starts.</p>
+              <div id="bandSummary" class="band-summary">Bands appear after playback starts.</div>
+            </section>
+
+            <section class="panel how-panel" id="research" aria-labelledby="how-heading">
+              <div class="panel-heading"><div><span class="panel-icon">⇢</span><h2 id="how-heading">How It Works</h2></div></div>
+              <ol class="pipeline-list"><li><b>01</b><span>Song or microphone</span><small>Different local source adapters</small></li><li><b>02</b><span>Audio features</span><small>FFT bands · RMS · transient · beat confidence</small></li><li><b>03</b><span>Lighting engine</span><small>N logical values · attack / release</small></li><li><b>04</b><span>Hardware adapter</span><small>Map N values to ten physical channels</small></li><li><b>05</b><span>Web Serial → UNO R4</span><small>Ten CSV values · 115200 baud</small></li></ol>
+              <p class="research-copy">BeatSync measures signal energy and timing changes. It does not claim to understand song meaning. The live audio path stays in the browser; only metadata and lyric lookups use the local application service.</p>
+              <details class="hardware-map"><summary>Pin mapping and limitations</summary><div class="pin-map" id="pinMap"></div><p>PWM: D3, D5, D6, D9, D10, D11. Digital-only: D2, D4, D7, D8 (threshold 128). Each ordinary LED uses its own resistor.</p></details>
+            </section>
+
+            <section class="panel team-panel" aria-labelledby="team-heading">
+              <div class="panel-heading"><div><span class="panel-icon">✦</span><h2 id="team-heading">Project Notes</h2></div></div>
+              <p>BeatSync is a deterministic audio-to-light engineering project. The browser owns audio analysis, lighting values, and USB serial output. Physical playback and hardware results remain pending until tested on the connected board.</p>
+              <a href="#timeline">View verified milestones <span aria-hidden="true">→</span></a>
+            </section>
+
+            <section class="panel future-panel" aria-labelledby="future-heading">
+              <div class="panel-heading"><div><span class="panel-icon">⌁</span><h2 id="future-heading">Limits & Future Scope</h2></div></div>
+              <ul><li>Four outputs use digital thresholding; they cannot dim smoothly.</li><li>Firmware has no frame acknowledgement, so physical brightness is not read back.</li><li>Beat/BPM and band mapping need testing across full songs and genres.</li></ul>
+              <p>The virtual frame supports up to 100 configurable logical LEDs here. The current Arduino remains a 10-output monochrome proof; four channels are digital-only, and no device acknowledgement or physical brightness readback exists.</p>
+            </section>
+          </div>
+        </div>
+
+        <section class="panel timeline-panel" id="timeline" aria-labelledby="timeline-heading">
+          <div class="panel-heading"><div><span class="panel-icon">◷</span><h2 id="timeline-heading">Development Timeline</h2></div><span class="muted-chip">OBSERVED PROJECT MILESTONES</span></div>
+          <ol class="timeline"><li class="timeline__done"><i></i><b>Single LED</b><small>Manual 0–255 PWM confirmed</small></li><li class="timeline__done"><i></i><b>Web Serial</b><small>Browser manual control confirmed</small></li><li class="timeline__done"><i></i><b>FFT analysis</b><small>Audio-only loop tested past 90 s</small></li><li class="timeline__current"><i></i><b>10-LED integration</b><small>Dashboard and firmware ready for hardware retest</small></li><li><i></i><b>Full-song test</b><small>40 s · 90 s · end-of-track still to verify</small></li></ol>
+        </section>
+
+        <footer class="footer"><span>BEATSYNC <i>·</i> MUSIC IS DATA. DATA IS LIGHT.</span><span id="footerState">LOCAL-ONLY AUDIO PIPELINE</span></footer>
+      </main>
+
+      <main id="libraryView" class="main-content library-view" aria-labelledby="libraryHeading" hidden>
+        <section class="panel library-view__header">
+          <div>
+            <p class="eyebrow"><span class="eyebrow__line"></span>YOUR MUSIC, ONE LIBRARY</p>
+            <h1 id="libraryHeading" tabindex="-1">Music Library</h1>
+            <p>Choose local media for playback or select a catalog entry to view its metadata.</p>
+          </div>
+          <button class="button button--outline" id="closeLibraryButton" type="button">Back to dashboard</button>
+        </section>
+
+        <section class="panel library-browser" aria-label="Library tracks">
+          <div class="library-tools">
+            <label for="catalogSearch">Search title or artist<input id="catalogSearch" type="search" placeholder="Search your library" /></label>
+            <label for="catalogLanguage">Language
+              <select id="catalogLanguage">
+                <option value="all">All languages</option>
+                <option value="english">English</option>
+                <option value="hindi">Hindi</option>
+                <option value="punjabi">Punjabi</option>
+                <option value="bhojpuri">Bhojpuri</option>
+                <option value="bengali">Bengali</option>
+              </select>
+            </label>
+          </div>
+
+          <section class="library-section" aria-labelledby="localLibraryHeading">
+            <div class="library-section__heading"><div><h2 id="localLibraryHeading">Local media</h2><p>Files selected on this device · playback and analysis available</p></div><span id="localLibraryCount">0 items</span></div>
+            <div class="library-list" id="playlist" aria-label="Local media library"><div class="empty-note">No local media yet. Add a music or video file from the dashboard.</div></div>
+          </section>
+
+          <section class="library-section" aria-labelledby="catalogHeading">
+            <div class="library-section__heading"><div><h2 id="catalogHeading">Test catalog</h2><p>Metadata only · no audio files are bundled</p></div><span id="catalogCount">40 / 40 tracks</span></div>
+            <div id="catalogList" class="catalog-list"></div>
+          </section>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="/frontend/app.js"></script>
+  </body>
+</html>
