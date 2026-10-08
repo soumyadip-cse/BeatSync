@@ -1,0 +1,17 @@
+[build]
+  publish = "."
+
+[[redirects]]
+  from = "/"
+  to = "/frontend/"
+  status = 302
+
+[[redirects]]
+  from = "/api/lyrics/lookup"
+  to = "https://lrclib.net/api/get"
+  status = 200
+
+[[redirects]]
+  from = "/api/lyrics/search"
+  to = "https://lrclib.net/api/search"
+  status = 200

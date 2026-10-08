@@ -56,6 +56,15 @@ Architecture, mapping, hardware, protocol, and cadence decisions are recorded wi
 - Evidence: Owner's 2026-10-06 comprehensive request; existing ten-channel sketch/profile; deterministic synthetic input checks; 20 Node tests passing. No browser, live API, USB board, or physical LED verification was available. The historical serial-enabled audio pause around 38–42 seconds remains unresolved.
 - Proposed by: Project owner; implemented by Codex for review.
 
+## D-007: Multi-target static and cloud deployment configuration (GitHub Pages, Vercel, Netlify)
+
+- Date: 2026-10-08
+- Status: Implemented and tested.
+- Decision: Add root entrypoint redirection, .nojekyll flag, relative asset paths, vercel.json, netlify.toml, and modular serverless api/ handler. The core real-time audio and serial architecture remains 100% frontend-local and deterministic.
+- Rationale: Enables zero-friction hosting on GitHub Pages, Vercel, and Netlify while preserving local dev-server and test workflows.
+- Evidence: 20/20 unit tests pass; dev-server redirect verified; GitHub Pages live asset verification; Vercel and Netlify configurations added.
+- Proposed by: Project owner request.
+
 ## Current open acceptance items
 
 - Verify local media playback/codec handling, seeks, actual LRCLIB results, synced/plain/no-match lyrics, microphone permission, and source switching in a supported browser.
@@ -63,3 +72,4 @@ Architecture, mapping, hardware, protocol, and cadence decisions are recorded wi
 - Repeat full-song playback with serial off and on and the board disconnected; record media events and actual LEDs at 40 seconds, 90 seconds, and end-of-file. Do not mark the historic pause resolved before that test passes.
 - Select/license a compatible Chromaprint provider before enabling the optional AcoustID fallback; the integration hook exists, the provider is not bundled.
 - Select any persistence/database only if a specific saved-data requirement is approved.
+

@@ -205,13 +205,22 @@ async function serveStatic(pathname, response, method = "GET") {
     sendJson(response, 400, { message: "Invalid URL encoding." });
     return;
   }
-  if (relative === "/") relative = "/frontend/index.html";
+  if (relative === "/") {
+    response.writeHead(302, { Location: "/frontend/" });
+    response.end();
+    return;
+  }
   const segments = relative.replace(/^\/+/, "").split(/[\\/]/);
-  if (!ALLOWED_STATIC_ROOTS.has(segments[0]) || segments.some((item) => item.startsWith("."))) {
+  if (segments.some((item) => item.startsWith("."))) {
     sendJson(response, 404, { message: "Not found." });
     return;
   }
-  let filePath = path.resolve(ROOT, ...segments);
+  let filePath;
+  if (ALLOWED_STATIC_ROOTS.has(segments[0])) {
+    filePath = path.resolve(ROOT, ...segments);
+  } else {
+    filePath = path.resolve(ROOT, "frontend", ...segments);
+  }
   if (!filePath.startsWith(ROOT + path.sep)) {
     sendJson(response, 403, { message: "Forbidden." });
     return;

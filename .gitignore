@@ -3,6 +3,8 @@ node_modules/
 dist/
 coverage/
 .vite/
+.netlify/
+.vercel/
 
 # Local configuration and secrets
 .env
