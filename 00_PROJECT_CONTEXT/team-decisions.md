@@ -65,6 +65,15 @@ Architecture, mapping, hardware, protocol, and cadence decisions are recorded wi
 - Evidence: 20/20 unit tests pass; dev-server redirect verified; GitHub Pages live asset verification; Vercel and Netlify configurations added.
 - Proposed by: Project owner request.
 
+## D-008: Website name change to Spectrasynk
+
+- Date: 2026-10-09
+- Status: Implemented and deployed.
+- Decision: Rebrand user-facing website title, headers, hero tags, and footer from BeatSync to Spectrasynk to resolve naming collision with an existing third-party service. All core deterministic real-time audio, lighting engine, hardware profiles, and serial communication remain completely untouched.
+- Rationale: Project owner identified an existing site named beatsynk and requested updating website branding to Spectrasynk without changing any underlying code.
+- Evidence: Project owner request; verified unchanged audio/serial architecture and tests.
+- Proposed by: Project owner.
+
 ## Current open acceptance items
 
 - Verify local media playback/codec handling, seeks, actual LRCLIB results, synced/plain/no-match lyrics, microphone permission, and source switching in a supported browser.

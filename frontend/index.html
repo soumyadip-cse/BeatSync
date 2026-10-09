@@ -4,16 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#050914" />
-    <meta name="description" content="BeatSync turns real music into measurable audio features and physical LED light." />
-    <title>BeatSync — Music Into Light</title>
+    <meta name="description" content="Spectrasynk turns real music into measurable audio features and physical LED light." />
+    <title>Spectrasynk — Music Into Light</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <div class="cosmos" aria-hidden="true"><div class="cosmos__nebula"></div><div class="cosmos__stars" id="starfield"></div></div>
     <header class="topbar">
-      <a class="brand" href="#home" aria-label="BeatSync home">
+      <a class="brand" href="#home" aria-label="Spectrasynk home">
         <span class="brand__mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
-        <span><strong>Beat<span>Sync</span></strong><small>Music · Lyrics · Arduino Lights</small></span>
+        <span><strong>Spectra<span>synk</span></strong><small>Music · Lyrics · Arduino Lights</small></span>
       </a>
       <div class="topbar__right">
         <div class="serial-pill" id="connectionPill"><span class="status-dot"></span><span id="connectionLabel">Arduino Disconnected</span></div>
@@ -50,7 +50,7 @@
             <span class="hero-orbit__satellite hero-orbit__satellite--one"></span><span class="hero-orbit__satellite hero-orbit__satellite--two"></span>
             <div class="hero-orbit__caption">AUDIO <i>→</i> LIGHT</div>
           </div>
-          <div class="hero__edge">BEATSYNC / EXPERIMENT 01</div>
+          <div class="hero__edge">SPECTRASYNK / EXPERIMENT 01</div>
         </section>
 
         <div class="dashboard-grid">
@@ -58,7 +58,7 @@
             <section class="panel player-panel" id="experience" aria-labelledby="player-heading">
               <div class="panel-heading"><div><span class="panel-icon">♫</span><h2 id="player-heading">Now Playing</h2></div><span class="live-tag" id="playState"><i></i>READY</span></div>
               <label class="upload-target" for="audioFiles"><span class="upload-target__icon">＋</span><span><b>Add local music</b><small>MP3, WAV, M4A, OGG or video with audio · files stay on this device</small></span><input id="audioFiles" type="file" accept="audio/*,video/*,.mp3,.mpeg,.wav,.m4a,.ogg,.mp4,.webm" multiple /></label>
-              <div class="track-info"><div class="album-art" aria-hidden="true"><span class="album-art__disc"></span><span class="album-art__orbit">BS</span></div><div class="track-info__copy"><h3 id="trackName">No track selected</h3><p id="trackArtist">Choose a local music file to begin</p><div class="track-meta"><span id="trackDuration">--:--</span><span id="sourceLabel">NO SOURCE</span></div></div></div>
+              <div class="track-info"><div class="album-art" aria-hidden="true"><span class="album-art__disc"></span><span class="album-art__orbit">SS</span></div><div class="track-info__copy"><h3 id="trackName">No track selected</h3><p id="trackArtist">Choose a local music file to begin</p><div class="track-meta"><span id="trackDuration">--:--</span><span id="sourceLabel">NO SOURCE</span></div></div></div>
               <p class="track-availability" id="trackAvailability" hidden></p>
               <audio id="audioPlayer" controls preload="metadata"></audio>
               <div class="mic-controls">
@@ -205,13 +205,13 @@
             <section class="panel how-panel" id="research" aria-labelledby="how-heading">
               <div class="panel-heading"><div><span class="panel-icon">⇢</span><h2 id="how-heading">How It Works</h2></div></div>
               <ol class="pipeline-list"><li><b>01</b><span>Song or microphone</span><small>Different local source adapters</small></li><li><b>02</b><span>Audio features</span><small>FFT bands · RMS · transient · beat confidence</small></li><li><b>03</b><span>Lighting engine</span><small>N logical values · attack / release</small></li><li><b>04</b><span>Hardware adapter</span><small>Map N values to ten physical channels</small></li><li><b>05</b><span>Web Serial → UNO R4</span><small>Ten CSV values · 115200 baud</small></li></ol>
-              <p class="research-copy">BeatSync measures signal energy and timing changes. It does not claim to understand song meaning. The live audio path stays in the browser; only metadata and lyric lookups use the local application service.</p>
+              <p class="research-copy">Spectrasynk measures signal energy and timing changes. It does not claim to understand song meaning. The live audio path stays in the browser; only metadata and lyric lookups use the local application service.</p>
               <details class="hardware-map"><summary>Pin mapping and limitations</summary><div class="pin-map" id="pinMap"></div><p>PWM: D3, D5, D6, D9, D10, D11. Digital-only: D2, D4, D7, D8 (threshold 128). Each ordinary LED uses its own resistor.</p></details>
             </section>
 
             <section class="panel team-panel" aria-labelledby="team-heading">
               <div class="panel-heading"><div><span class="panel-icon">✦</span><h2 id="team-heading">Project Notes</h2></div></div>
-              <p>BeatSync is a deterministic audio-to-light engineering project. The browser owns audio analysis, lighting values, and USB serial output. Physical playback and hardware results remain pending until tested on the connected board.</p>
+              <p>Spectrasynk is a deterministic audio-to-light engineering project. The browser owns audio analysis, lighting values, and USB serial output. Physical playback and hardware results remain pending until tested on the connected board.</p>
               <a href="#timeline">View verified milestones <span aria-hidden="true">→</span></a>
             </section>
 
@@ -228,7 +228,7 @@
           <ol class="timeline"><li class="timeline__done"><i></i><b>Single LED</b><small>Manual 0–255 PWM confirmed</small></li><li class="timeline__done"><i></i><b>Web Serial</b><small>Browser manual control confirmed</small></li><li class="timeline__done"><i></i><b>FFT analysis</b><small>Audio-only loop tested past 90 s</small></li><li class="timeline__current"><i></i><b>10-LED integration</b><small>Dashboard and firmware ready for hardware retest</small></li><li><i></i><b>Full-song test</b><small>40 s · 90 s · end-of-track still to verify</small></li></ol>
         </section>
 
-        <footer class="footer"><span>BEATSYNC <i>·</i> MUSIC IS DATA. DATA IS LIGHT.</span><span id="footerState">LOCAL-ONLY AUDIO PIPELINE</span></footer>
+        <footer class="footer"><span>SPECTRASYNK <i>·</i> MUSIC IS DATA. DATA IS LIGHT.</span><span id="footerState">LOCAL-ONLY AUDIO PIPELINE</span></footer>
       </main>
 
       <main id="libraryView" class="main-content library-view" aria-labelledby="libraryHeading" hidden>
